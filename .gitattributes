@@ -1,0 +1,14 @@
+# Normalize line endings to LF for all text files
+* text=auto
+
+# Specify custom merge driver for specific file types
+*.xml merge=xmlmerge
+*.pdf -merge
+
+# Treat certain files as binary
+*.jpg binary
+*.png binary
+
+# Detect programming language for syntax highlighting
+*.js linguist-language=JavaScript
+

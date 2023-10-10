@@ -9,7 +9,7 @@ function FavoritesPage() {
   } else {
     content = <MeetupList meetups={favorites} />;
   }
-  // console.log(favorites);
+
   return (
     <>
       <h1>Favorites Page</h1>

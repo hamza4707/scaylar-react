@@ -1,20 +1,27 @@
-import { configureStore } from "@reduxjs/toolkit";
-import favoriteReducer from "../features/favorite/favoriteSlice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
-import thunk from "redux-thunk";
+import favoriteReducer from "../features/favorite/favoriteSlice";
 
 const persistConfig = {
   key: "root",
+  version: 1,
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, favoriteReducer);
+const rootReducer = combineReducers({
+  favoriteReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   // reducer: { favoriteReducer },
   reducer: persistedReducer,
-  middleware: [thunk],
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const persistor = persistStore(store);

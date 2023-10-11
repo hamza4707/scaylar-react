@@ -4,6 +4,7 @@ import classes from "./MainNavigation.module.css";
 
 function MainNavigation() {
   const favorites = useSelector(state => state.favoriteReducer.totalFavorites);
+  console.log("Favorites :", favorites);
 
   return (
     <header className={classes.header}>
@@ -13,7 +14,6 @@ function MainNavigation() {
           <li>
             <Link to="/">Home</Link>
           </li>
-
           <li>
             <Link to="/new-meetup">New Meetup</Link>
           </li>

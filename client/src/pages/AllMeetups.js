@@ -36,7 +36,7 @@ function AllMeetupsPage() {
   return (
     <section>
       <h1>All Meetups</h1>
-      {console.log("LOG: Meetups:: ", loadedMeetups)}
+      {/* {console.log("LOG: Meetups:: ", loadedMeetups)} */}
       <MeetupList meetups={loadedMeetups} />
       {/* <ul>
         {DUMMY_DATA.map((meetup) => {

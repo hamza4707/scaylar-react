@@ -1,10 +1,10 @@
+import { useDispatch, useSelector } from "react-redux";
 import {
   addFavorite,
   removeFavorite,
 } from "../../features/favorite/favoriteSlice";
 import Card from "../ui/Card";
 import classes from "./MeetupItem.module.css";
-import { useDispatch, useSelector } from "react-redux";
 
 function MeetupItem(props) {
   const dispatch = useDispatch();

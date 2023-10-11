@@ -33,17 +33,15 @@ function LoginPage() {
         return response.json();
       })
       .then(data => {
-        // setApiResponse(data);
         const loginCredentials = {
           username: data.username,
           password: data.password,
         };
-        console.log("Data:", loginCredentials);
 
         setLoginCredentialsData(loginCredentials);
       });
   }, []);
-  console.log("LOGIN CREDENTIALS DATA:", loginCredentialsData);
+  // console.log("LOGIN CREDENTIALS DATA:", loginCredentialsData);
 
   return (
     <section className="gradient-form h-full bg-neutral-200 dark:bg-neutral-700">

@@ -4,7 +4,6 @@ import classes from "./MainNavigation.module.css";
 
 function MainNavigation() {
   const favorites = useSelector(state => state.favoriteReducer.totalFavorites);
-  console.log("Favorites :", favorites);
 
   return (
     <header className={classes.header}>

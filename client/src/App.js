@@ -7,24 +7,22 @@ import NewMeetupPage from "./pages/NewMeetup";
 import Login from "./pages/Login";
 
 function App() {
-  const login = useSelector(state => state.loginReducer.login);
+  const loggedIn = useSelector(state => state.loginReducer.login);
   let content;
 
-  if (login) {
+  if (loggedIn) {
     content = (
-      <Layout>
-        <Routes>
-          <Route path="/" element={<AllMeetupsPage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-          <Route path="/new-meetup" element={<NewMeetupPage />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route path="/" element={<AllMeetupsPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/new-meetup" element={<NewMeetupPage />} />
+      </Routes>
     );
   } else {
     content = <Login />;
   }
 
-  return <>{content}</>;
+  return <Layout>{content}</Layout>;
 }
 
 export default App;

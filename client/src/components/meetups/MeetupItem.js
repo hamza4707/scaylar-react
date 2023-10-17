@@ -9,7 +9,6 @@ import classes from "./MeetupItem.module.css";
 function MeetupItem(props) {
   const dispatch = useDispatch();
   const favorites = useSelector(state => state.favoriteReducer.favorites);
-  // console.log("favorites :", favorites);
 
   return (
     <Card>

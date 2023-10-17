@@ -1,33 +1,34 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import MeetupList from "../components/meetups/MeetupList";
 
 function AllMeetupsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadedMeetups, setLoadedMeetups] = useState([]);
 
+  const token = useSelector(state => state.tokenReducer.token);
+
   useEffect(() => {
-    fetch(
-      "https://first-react-app-3eb72-default-rtdb.firebaseio.com/meetup.json"
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        const meetups = [];
-
-        for (const key in data) {
-          const meetup = {
-            id: key,
-            ...data[key],
-          };
-
-          meetups.push(meetup);
-        }
-
-        setIsLoading(false);
-        setLoadedMeetups(meetups);
+    (async function () {
+      const response = await fetch("http://localhost:8000/api/v1/meetups", {
+        headers: { Authentication: `Bearer ${token}` },
       });
-  }, []);
+      const resdata = await response.json();
+      const data = resdata.body.meetups;
+      const meetups = [];
+
+      for (const key in data) {
+        const meetup = {
+          id: key,
+          ...data[key],
+        };
+        meetups.push(meetup);
+      }
+
+      setIsLoading(false);
+      setLoadedMeetups(meetups);
+    })();
+  }, [token]);
 
   if (isLoading) {
     return <section>Loading...</section>;
@@ -36,13 +37,7 @@ function AllMeetupsPage() {
   return (
     <section>
       <h1>All Meetups</h1>
-      {/* {console.log("LOG: Meetups:: ", loadedMeetups)} */}
       <MeetupList meetups={loadedMeetups} />
-      {/* <ul>
-        {DUMMY_DATA.map((meetup) => {
-          return <li key={meetup.id}>{meetup.title}</li>;
-        })}
-      </ul> */}
     </section>
   );
 }

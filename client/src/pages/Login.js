@@ -1,51 +1,65 @@
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { loggedIn } from "../features/login/loginSlice";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogin } from "../features/login/loginSlice";
+import { setToken } from "../features/token/tokenSlice";
+import { signupClicked } from "../features/signup/signupSlice";
 import LoginForm from "../components/forms/LoginForm";
 
 function LoginPage() {
-  const [loginCredentialsData, setLoginCredentialsData] = useState({});
+  const [enteredEmail, setEnteredEmail] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredUsername, setEnteredUsername] = useState("");
-  const [enterdPassword, setEnteredPassword] = useState("");
+  const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+
+  const isSignup = useSelector(state => state.signupReducer.signup);
 
   const dispatch = useDispatch();
 
-  function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
-    if (
-      loginCredentialsData.username === enteredUsername &&
-      loginCredentialsData.password === enterdPassword
-    ) {
-      console.log("compared");
-      dispatch(loggedIn());
+    if (!isSignup) {
+      const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+        }),
+        headers: { "Content-type": "application/json" },
+      });
+      const data = await response.json();
+
+      if (data.body.token) {
+        dispatch(setToken(data.body.token));
+      }
+      if (data.body.login) {
+        dispatch(setLogin());
+      }
     } else {
-      console.log("wrong password");
+      if (enteredPassword === enteredConfirmPassword) {
+        const response = await fetch("http://localhost:8000/signup", {
+          method: "POST",
+          body: JSON.stringify({
+            username: enteredUsername,
+            email: enteredEmail,
+            password: enteredPassword,
+          }),
+          headers: { "Content-type": "application/json" },
+        });
+        const data = await response.json();
+        if (data.status === "success") {
+          dispatch(signupClicked());
+        }
+      } else console.log("Password didn`t match!");
     }
   }
-
-  useEffect(() => {
-    fetch(
-      "https://first-react-app-3eb72-default-rtdb.firebaseio.com/login.json"
-    )
-      .then(response => {
-        return response.json();
-      })
-      .then(data => {
-        const loginCredentials = {
-          username: data.username,
-          password: data.password,
-        };
-
-        setLoginCredentialsData(loginCredentials);
-      });
-  }, []);
-  // console.log("LOGIN CREDENTIALS DATA:", loginCredentialsData);
 
   return (
     <LoginForm
       onSubmit={submitHandler}
       username={setEnteredUsername}
+      email={setEnteredEmail}
       password={setEnteredPassword}
+      confirmPassword={setEnteredConfirmPassword}
     />
   );
 }
